@@ -11,7 +11,7 @@ const { Auth } = require("../models/auth");
 const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { email, password } = req.body;
   const auth = await Auth.findOne({ email });
   if (auth) {
     throw HttpError(409, "Email in use");
@@ -52,7 +52,7 @@ const login = async (req, res) => {
 
   res.json({
     token,
-    user: {
+    auth: {
       email: auth.email,
     },
   });
@@ -76,7 +76,9 @@ const logout = async (req, res) => {
   const { _id } = req.auth;
   await Auth.findByIdAndUpdate(_id, { token: "" });
 
-  res.status(204).json();
+  res.status(204).json({
+    message: "Logout success",
+  });
 };
 
 const getCurrent = async (req, res) => {
