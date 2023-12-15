@@ -7,7 +7,7 @@ const crypto = require("node:crypto");
 
 const { HttpError, ctrlWrapper } = require("../helpers");
 const { Auth } = require("../models/auth");
-
+const { User } = require("../models/user");
 const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
@@ -26,7 +26,9 @@ const register = async (req, res) => {
 
     verificationCode,
   });
-
+  await User.create({
+    _id: newAuth._id,
+  });
   res.status(201).json({
     auth: {
       name: newAuth.name,
