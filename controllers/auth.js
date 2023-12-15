@@ -78,7 +78,9 @@ const logout = async (req, res) => {
   const { _id } = req.auth;
   await Auth.findByIdAndUpdate(_id, { token: "" });
 
-  res.status(200).json({ message: "Singout success" });
+  res.status(204).json({
+    message: "Logout success",
+  });
 };
 
 const getCurrent = async (req, res) => {
