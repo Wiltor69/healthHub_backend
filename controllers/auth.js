@@ -7,11 +7,11 @@ const crypto = require("node:crypto");
 
 const { HttpError, ctrlWrapper } = require("../helpers");
 const { Auth } = require("../models/auth");
-
+const { User } = require("../models/user");
 const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { email, password } = req.body;
   const auth = await Auth.findOne({ email });
   if (auth) {
     throw HttpError(409, "Email in use");
@@ -26,7 +26,9 @@ const register = async (req, res) => {
 
     verificationCode,
   });
-
+  await User.create({
+    _id: newAuth._id,
+  });
   res.status(201).json({
     auth: {
       name: newAuth.name,
@@ -76,7 +78,7 @@ const logout = async (req, res) => {
   const { _id } = req.auth;
   await Auth.findByIdAndUpdate(_id, { token: "" });
 
-  res.status(204).json();
+  res.status(200).json({ message: "Singout success" });
 };
 
 const getCurrent = async (req, res) => {
