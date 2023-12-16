@@ -1,13 +1,13 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-// const Jimp = require("jimp");
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+// import Jimp from  "jimp";
 
-// const gravatar = require("gravatar");
-const crypto = require("node:crypto");
+// import gravatar from  "gravatar";
+import crypto from "node:crypto";
 
-const { HttpError, ctrlWrapper } = require("../helpers");
-const { Auth } = require("../models/auth");
-const { User } = require("../models/user");
+import { HttpError, ctrlWrapper } from "../helpers/index.js";
+import { Auth } from "../models/auth.js";
+import { User } from "../models/user.js";
 const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
@@ -89,7 +89,7 @@ const getCurrent = async (req, res) => {
   res.json({ email });
 };
 
-module.exports = {
+export default {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   updateSubscription: ctrlWrapper(updateSubscription),

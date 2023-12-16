@@ -1,5 +1,5 @@
-const { ctrlWrapper } = require("../helpers");
-const { User } = require("../models/user");
+import { ctrlWrapper } from "../helpers/index.js";
+import { User } from "../models/user.js";
 
 const updateUser = async (req, res) => {
   console.log(req.auth);
@@ -15,6 +15,6 @@ const updateUser = async (req, res) => {
   });
   res.json({ message: "updated" });
 };
-module.exports = {
+export default {
   updateUser: ctrlWrapper(updateUser),
 };
