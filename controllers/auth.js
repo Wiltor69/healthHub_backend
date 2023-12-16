@@ -49,7 +49,7 @@ const login = async (req, res) => {
   const payload = {
     id: auth._id,
   };
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "30d" });
   await Auth.findOneAndUpdate(auth._id, { token });
 
   res.json({
