@@ -1,7 +1,7 @@
-const express = require("express");
-const ctrl = require("../../controllers/auth");
-const { validateBody, authenticate } = require("../../middlewares");
-const { schemas } = require("../../models/auth");
+import express from "express";
+import ctrl from "../../controllers/auth.js";
+import { validateBody, authenticate } from "../../middlewares/index.js";
+import { schemas } from "../../models/auth.js";
 
 const router = express.Router();
 
@@ -10,4 +10,4 @@ router.post("/singin", validateBody(schemas.loginSchema), ctrl.login);
 
 router.post("/singout", authenticate, ctrl.logout);
 
-module.exports = router;
+export default router;

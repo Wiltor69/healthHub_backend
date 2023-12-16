@@ -1,10 +1,15 @@
-const express = require("express");
-const { validateBody } = require("../../middlewares");
-const { updateSchema } = require("../../models/user");
-const authenticate = require("../../middlewares/authenticate");
-const { updateUser } = require("../../controllers/user");
+import express from "express";
+import { validateBody } from "../../middlewares/index.js";
+import { updateSchema } from "../../models/user.js";
+import authenticate from "../../middlewares/authenticate.js";
+import userControllers from "../../controllers/user.js";
 const router = express.Router();
 
-router.put("/update", authenticate, validateBody(updateSchema), updateUser);
+router.put(
+  "/update",
+  authenticate,
+  validateBody(updateSchema),
+  userControllers.updateUser
+);
 
-module.exports = router;
+export default router;

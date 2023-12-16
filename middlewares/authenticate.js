@@ -1,6 +1,6 @@
-const jwt = require("jsonwebtoken");
-const { HttpError } = require("../helpers");
-const { Auth } = require("../models/auth");
+import jwt from "jsonwebtoken";
+import { HttpError } from "../helpers/index.js";
+import { Auth } from "../models/auth.js";
 const { SECRET_KEY } = process.env;
 
 const authenticate = async (req, res, next) => {
@@ -22,4 +22,4 @@ const authenticate = async (req, res, next) => {
   }
 };
 
-module.exports = authenticate;
+export default authenticate;
