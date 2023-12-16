@@ -1,6 +1,6 @@
-const { Schema, model } = require("mongoose");
-const { handleMongooseError } = require("../helpers");
-const Joi = require("joi");
+import { Schema, model } from "mongoose";
+import { handleMongooseError } from "../helpers/index.js";
+import Joi from "joi";
 const emailRegexp = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 const authSchema = new Schema(
@@ -49,12 +49,12 @@ const emailSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
 });
 
-const schemas = {
+export const schemas = {
   registerSchema,
   loginSchema,
   updSubscriptionSchema,
   emailSchema,
 };
-const Auth = model("auth", authSchema);
+export const Auth = model("auth", authSchema);
 
-module.exports = { Auth, schemas };
+// export default { Auth, schemas };

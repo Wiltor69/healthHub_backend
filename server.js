@@ -1,6 +1,6 @@
-const app = require("./app");
+import app from "./app.js";
 
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const { DB_URI, PORT = 3000 } = process.env;
 

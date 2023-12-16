@@ -1,6 +1,6 @@
-const { Schema, model } = require("mongoose");
-const { handleMongooseError } = require("../helpers");
-const Joi = require("joi");
+import { Schema, model } from "mongoose";
+import { handleMongooseError } from "../helpers/index.js";
+import Joi from "joi";
 const goalList = ["Lose fat", "Maintain", "Gain Muscle"];
 const genderList = ["male", "female"];
 const activityList = [1.2, 1.375, 1.55, 1.725, 1.9];
@@ -33,7 +33,7 @@ const userSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 userSchema.post("save", handleMongooseError);
-const updateSchema = Joi.object({
+export const updateSchema = Joi.object({
   age: Joi.number(),
   height: Joi.number(),
   weight: Joi.number(),
@@ -44,5 +44,5 @@ const updateSchema = Joi.object({
     fat: Joi.number(),
   }),
 });
-const User = model("user", userSchema);
-module.exports = { User, updateSchema };
+export const User = model("user", userSchema);
+// module.exports = { User, updateSchema };
