@@ -3,7 +3,7 @@ import { ctrlWrapper } from "../helpers/index.js";
 
 const getFoods = async (req, res) => {
   const result = await Food.find({}, "-createdAt -updatedAt");
-  //   console.log(result);
+
   res.json(result);
 };
 
