@@ -1,8 +1,8 @@
-import { Food } from "../models/Food.js";
+import { RecomFood } from "../models/recommendFoods.js";
 import { ctrlWrapper } from "../helpers/index.js";
 
 const getFoods = async (req, res) => {
-  const result = await Food.find({}, "-createdAt -updatedAt");
+  const result = await RecomFood.find({}, "-createdAt -updatedAt");
 
   res.json(result);
 };
