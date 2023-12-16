@@ -3,6 +3,6 @@ import ctrl from "../../controllers/recommendFoods.js";
 
 const router = express.Router();
 
-router.get("/recommended-food", ctrl.getFoods);
+router.get("/", ctrl.getFoods);
 
 export default router;
