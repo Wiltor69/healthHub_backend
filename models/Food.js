@@ -38,6 +38,6 @@ export const foodAddSchema = Joi.object({
   date: Joi.string().required(),
 });
 
-const Food = model("food", foodSchema);
+export const Food = model("food", foodSchema);
 
-export default Food;
+// export default Food;
