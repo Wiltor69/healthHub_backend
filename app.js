@@ -20,6 +20,7 @@ app.use(express.static("public"));
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/recommended-food", foodRouter);
+
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
 });
