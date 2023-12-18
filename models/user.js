@@ -28,7 +28,14 @@ const userSchema = new Schema(
       fat: { type: Number },
     },
 
-    waterNeed: { type: Number },
+    waterDailyNorma: {
+      type: Number,
+      default: 2000,
+    },
+    caloriesDayilyNorma: {
+      type: Number,
+      default: 2000,
+    },
   },
   { versionKey: false, timestamps: true }
 );

@@ -24,6 +24,14 @@ const authSchema = new Schema(
       type: String,
       default: null,
     },
+    waterDailyNorma: {
+      type: Number,
+      default: 2000,
+    },
+    caloriesDayilyNorma: {
+      type: Number,
+      default: 2000,
+    },
   },
   { versionKey: false, timestamps: true }
 );
