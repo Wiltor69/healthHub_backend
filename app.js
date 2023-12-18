@@ -11,6 +11,7 @@ import foodRouter from "./routes/api/recommendFoods.js";
 import swaggerDocument from "./swagger.json" assert { type: "json" };
 import swaggerUi from "swagger-ui-express";
 
+import statsRouter from "./routes/api/stats-router.js";
 const app = express();
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
