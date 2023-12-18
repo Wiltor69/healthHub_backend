@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 import { handleMongooseError } from "../helpers/index.js";
 import Joi from "joi";
 const goalList = ["Lose fat", "Maintain", "Gain Muscle"];
-const genderList = ["male", "female"];
+const genderList = ["Male", "Female"];
 const activityList = [1.2, 1.375, 1.55, 1.725, 1.9];
 const userSchema = new Schema(
   {

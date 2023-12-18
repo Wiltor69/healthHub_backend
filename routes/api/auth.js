@@ -5,9 +5,9 @@ import { schemas } from "../../models/auth.js";
 
 const router = express.Router();
 
-router.post("/singup", validateBody(schemas.registerSchema), ctrl.register);
-router.post("/singin", validateBody(schemas.loginSchema), ctrl.login);
+router.post("/signup", validateBody(schemas.registerSchema), ctrl.register);
+router.post("/signin", validateBody(schemas.loginSchema), ctrl.login);
 
-router.post("/singout", authenticate, ctrl.logout);
+router.post("/signout", authenticate, ctrl.logout);
 
 export default router;
