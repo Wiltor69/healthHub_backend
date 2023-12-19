@@ -19,6 +19,11 @@ const authSchema = new Schema(
       required: [true, "Email is required"],
       unique: true,
     },
+    avatarURL: {
+      type: String,
+      default:
+        "https://res.cloudinary.com/duz9hwe05/image/upload/v1702814259/avatar_2_kvkaro.jpg",
+    },
 
     token: {
       type: String,

@@ -89,10 +89,15 @@ const getCurrent = async (req, res) => {
   res.json({ email });
 };
 
+const creatAvatar = async (req, res) => {
+  const avatarURL = req.file.path;
+};
+
 export default {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   updateSubscription: ctrlWrapper(updateSubscription),
   logout: ctrlWrapper(logout),
   getCurrent: ctrlWrapper(getCurrent),
+  creatAvatar: ctrlWrapper(creatAvatar),
 };
