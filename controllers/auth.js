@@ -26,8 +26,15 @@ const register = async (req, res) => {
 
     verificationCode,
   });
-  await User.create({
+  const newUser = await User.create({
     _id: newAuth._id,
+    goal: "Lose fat",
+    gender: "Male",
+    age: 20,
+    weight: 60,
+    height: 160,
+    userActivity: "1.25",
+    waterDailyNorma: 0,
   });
   res.status(201).json({
     auth: {

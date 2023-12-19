@@ -2,8 +2,8 @@ import { Schema, model } from "mongoose";
 import { handleMongooseError } from "../helpers/index.js";
 import Joi from "joi";
 const goalList = ["Lose fat", "Maintain", "Gain Muscle"];
-const genderList = ["male", "female"];
-const activityList = [1.2, 1.375, 1.55, 1.725, 1.9];
+const genderList = ["Male", "Female"];
+const activityList = [1.25, 1.45, 1.65, 1.85, 2];
 const userSchema = new Schema(
   {
     goal: {
@@ -41,6 +41,8 @@ const userSchema = new Schema(
 );
 userSchema.post("save", handleMongooseError);
 export const updateSchema = Joi.object({
+  userActivity: Joi.string(),
+  gender: Joi.string(),
   age: Joi.number(),
   height: Joi.number(),
   weight: Joi.number(),
