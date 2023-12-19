@@ -124,6 +124,7 @@ const getStatsForToday = async (req, res) => {
 
   res.json({
     food: {
+      foodServings,
       caloriesDayilyNorma,
       caloriesAmount,
       fatAmount,
