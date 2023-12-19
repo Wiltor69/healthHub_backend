@@ -10,22 +10,18 @@ import {
 } from "../helpers/index.js";
 import ControllerWrapper from "../utils/ControllerWrapper.js";
 import formatTime from "../helpers/formatDateBD.js";
-// import { array } from "joi";
 
 const getStatsForMonth = async (req, res) => {
   const { _id: owner } = req.auth;
   const { monthNumber } = req.params;
-  // console.log(req.params);
-  // console.log(req);
-  // console.log(monthNumber);
-  const adjustedMonth = parseInt(monthNumber);
+  const adjustedMonth = parseInt(monthNumber) - 1;
 
   const startOfMonth = new Date();
   startOfMonth.setMonth(adjustedMonth, 1);
-  startOfMonth.setHours(0, 0, 0, 0); // Устанавливает первое число месяца
+  startOfMonth.setHours(0, 0, 0, 0);
 
   const endOfMonth = new Date();
-  endOfMonth.setMonth(adjustedMonth + 1, 0); // Устанавливает последний день месяца
+  endOfMonth.setMonth(adjustedMonth + 1, 0);
   endOfMonth.setHours(23, 59, 59, 999);
 
   const waterInputsForThisMonth = await Water.find({
@@ -44,81 +40,105 @@ const getStatsForMonth = async (req, res) => {
     owner,
   });
 
+  console.log(startOfMonth);
+  console.log(endOfMonth);
+
   const filteredWaterArray = Object.values(
     regroupedDataByDays(waterInputsForThisMonth)
   );
 
   const filteredFoodArray = Object.values(
-    regroupedDataByDays(waterInputsForThisMonth)
+    regroupedDataByDays(foodInputsForThisMonth)
   );
+  console.log(foodInputsForThisMonth);
+  console.log(filteredFoodArray);
 
-  // const waterResult = filteredWaterArray.map((array) => {
-  //     const formattedDate = formatDate(array[0].date);
+  const waterResult = filteredWaterArray.map((array) => {
+    const formattedDate = formatDate(array[0].date);
 
-  // })
+    return {
+      data: formattedDate,
+      water: array,
+    };
+  });
 
-  //   const result = filteredArray.map((array) => {
-  //     const formattedDate = formatDate(array[0].date);
+  const foodResult = filteredFoodArray.map((array) => {
+    const formattedDate = formatDate(array[0].date);
 
-  //     const formattedWaterRate = waterDailyNorma / 1000;
+    return {
+      data: formattedDate,
+      food: array,
+    };
+  });
 
-  //     const dailyNormFulfillment = calculateDailyFulfillment(
-  //       array,
-  //       waterDailyNorma
-  //     );
-
-  //     return {
-  //       data: formattedDate,
-  //       waterDailyNorma: formattedWaterRate,
-  //       dailyNormFulfillment,
-  //       servingOfWater: array.length,
-  //     };
-  //   });
-  //   console.log(result);
-
-  // const result = {
-  //     water: ,
-
-  // }
+  const result = {
+    water: waterResult,
+    food: foodResult,
+  };
 
   res.json(result);
 };
 
 const getStatsForToday = async (req, res) => {
   const { _id: owner, waterDailyNorma, caloriesDayilyNorma } = req.auth;
-  //   const { day, month } = req.params;
-  //   const adjustedDay = parseInt(day);
-  //   const adjustedMonth = parseInt(month) - 1;
 
-  const date = new Date();
-  //   date.setMonth(adjustedMonth);
-  //   date.setDate(adjustedDay);
+  const currentDate = new Date();
+  const startOfDay = new Date(currentDate);
+  startOfDay.setHours(0, 0, 0, 0);
 
-  const waterServings = await Water.find({ date, owner });
-  const foodServings = await Food.find({ date, owner });
+  const endOfDay = new Date(currentDate);
+  endOfDay.setHours(23, 59, 59, 999);
+
+  const waterServings = await Water.find({
+    date: {
+      $gte: startOfDay,
+      $lte: endOfDay,
+    },
+    owner,
+  });
+  const foodServings = await Food.find({
+    date: {
+      $gte: startOfDay,
+      $lte: endOfDay,
+    },
+    owner,
+  });
 
   const dailyNormFulfillment = calculateDailyFulfillment(
     waterServings,
     waterDailyNorma
   );
 
-  const caloriesAmount = calculateAmount(foodServings);
-  const waterAmount = calculateAmount(waterServings);
+  const caloriesAmount = calculateAmount.calculateCaloriesAmount(foodServings);
+  const waterAmount = calculateAmount.calculateWaterAmount(waterServings);
+  const fatAmount = calculateAmount.calculateFatAmount(foodServings);
+  const proteinAmount = calculateAmount.calculateProteinAmount(foodServings);
+  const carbonohidratesAmount =
+    calculateAmount.calculateCarbonohidratesAmount(foodServings);
 
   const waterLeft = calculateLeft(waterAmount, waterDailyNorma);
   const caloriesLeft = calculateLeft(caloriesAmount, caloriesDayilyNorma);
+  const fatLeft = calculateLeft(fatAmount, 100);
+  const proteinLeft = calculateLeft(proteinAmount, 130);
+  const carbonohidratesLeft = calculateLeft(carbonohidratesAmount, 200);
 
   res.json({
     food: {
       caloriesDayilyNorma,
       caloriesAmount,
+      fatAmount,
+      proteinAmount,
+      carbonohidratesAmount,
+      caloriesLeft,
+      fatLeft,
+      proteinLeft,
+      carbonohidratesLeft,
     },
     water: {
       waterDailyNorma,
       dailyNormFulfillment,
       waterLeft,
       waterAmount,
-      // waterServings,
     },
   });
 };
@@ -182,5 +202,5 @@ export default {
   getStatsForToday: ControllerWrapper(getStatsForToday),
   updateMealById: ControllerWrapper(updateMealById),
 
-  //   getByMonth: ControllerWrapper(getByMonth),
+  getStatsForMonth: ControllerWrapper(getStatsForMonth),
 };
