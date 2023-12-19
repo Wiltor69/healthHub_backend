@@ -13,7 +13,7 @@ router.use(authenticate);
 
 router.get("/today", statsControllers.getStatsForToday);
 
-// router.get("/month/:monthNumber", statsControllers.getByMonth);
+router.get("/month/:monthNumber", statsControllers.getStatsForMonth);
 
 router.post("/addWater", waterAddValidate, statsControllers.addWater);
 
@@ -21,19 +21,19 @@ router.post("/addMeal", mealAddValidate, statsControllers.addMeal);
 
 router.delete(
   "/deleteMeal/:mealId",
-  // isValidId,
+  isValidId,
   statsControllers.deleteMealById
 );
 
 router.delete(
   "/deleteWater/:waterId",
-  // isValidId,
+  isValidId,
   statsControllers.deleteWaterById
 );
 
 router.patch(
   "/updateMeal/:mealId",
-  // isValidId,
+  isValidId,
   waterAddValidate,
   statsControllers.updateMealById
 );
