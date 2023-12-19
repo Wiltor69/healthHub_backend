@@ -7,6 +7,7 @@ import {
   calculateAmount,
   regroupedDataByDays,
   HttpError,
+  calculateAverage,
 } from "../helpers/index.js";
 import ControllerWrapper from "../utils/ControllerWrapper.js";
 import formatTime from "../helpers/formatDateBD.js";
@@ -40,8 +41,12 @@ const getStatsForMonth = async (req, res) => {
     owner,
   });
 
-  console.log(startOfMonth);
-  console.log(endOfMonth);
+  const foodAverage = calculateAverage(foodInputsForThisMonth, monthNumber);
+  const waterAverage = calculateAverage(waterInputsForThisMonth, monthNumber);
+  // console.log(foodAverage);
+
+  // console.log(startOfMonth);
+  // console.log(endOfMonth);
 
   const filteredWaterArray = Object.values(
     regroupedDataByDays(waterInputsForThisMonth)
@@ -50,8 +55,8 @@ const getStatsForMonth = async (req, res) => {
   const filteredFoodArray = Object.values(
     regroupedDataByDays(foodInputsForThisMonth)
   );
-  console.log(foodInputsForThisMonth);
-  console.log(filteredFoodArray);
+  // console.log(foodInputsForThisMonth);
+  // console.log(filteredFoodArray);
 
   const waterResult = filteredWaterArray.map((array) => {
     const formattedDate = formatDate(array[0].date);
@@ -72,6 +77,8 @@ const getStatsForMonth = async (req, res) => {
   });
 
   const result = {
+    waterAverage,
+    foodAverage,
     water: waterResult,
     food: foodResult,
   };
