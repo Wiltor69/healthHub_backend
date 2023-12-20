@@ -90,6 +90,35 @@ const logout = async (req, res) => {
   });
 };
 
+const forgotPassword = async (req, res) => {
+  const newPassword = crypto.randomUUID();
+  const hashPass = await bcrypt.hash(password, 10);
+  const { email } = req.body;
+  const auth = await Auth.findOne({ email });
+  if (auth.token !== "") {
+    throw HttpError(400, "User is login");
+  }
+  await Auth.findByIdAndUpdate(auth._id, { password: hashPass });
+
+  // const forPassEmail = ElasticEmail.EmailMessageData.constructFromObject({
+  //   Recipients: [new ElasticEmail.EmailRecipient(email)],
+  //   Content: {
+  //     Body: [
+  //       ElasticEmail.BodyPart.constructFromObject({
+  //         ContentType: "HTML",
+  //         Content: `If you forgot your password, use this one: ${newPassword}`,
+  //       }),
+  //     ],
+  //     Subject: "You forgot your password for login in Health app",
+  //     From:
+  //   },
+  // });
+
+  // api.emailsPost(forPassEmail);
+
+  res.json({ message: "New password sent" });
+};
+
 const getCurrent = async (req, res) => {
   const { email } = req.auth;
 
@@ -107,4 +136,5 @@ export default {
   logout: ctrlWrapper(logout),
   getCurrent: ctrlWrapper(getCurrent),
   creatAvatar: ctrlWrapper(creatAvatar),
+  forgotPassword: ctrlWrapper(forgotPassword),
 };
