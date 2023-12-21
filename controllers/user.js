@@ -49,20 +49,14 @@ const updateUser = async (req, res) => {
   if (weight) {
     user.weight = weight;
     BMR = BMRMaleOrFemale(user, gender);
-    waterDailyNorma = (
-      user.weight * 0.03 +
-      waterPlus(user.userActivity)
-    ).toFixed(1);
+    waterDailyNorma = user.weight * 0.03 + waterPlus(user.userActivity);
 
     console.log(waterDailyNorma);
   }
   if (userActivity) {
     user.userActivity = userActivity;
     BMR = BMRMaleOrFemale(user, gender);
-    waterDailyNorma = (
-      user.weigth * 0.3 +
-      waterPlus(user.userActivity)
-    ).toFixed(1);
+    waterDailyNorma = user.weight * 0.3 + waterPlus(user.userActivity);
   }
   if (gender) {
     user.gender = gender;
@@ -74,8 +68,41 @@ const updateUser = async (req, res) => {
     caloriesDayilyNorma: BMR,
     waterDailyNorma,
   });
-  res.json({ message: `updated` });
+  res.json({ message: `user updated` });
+};
+
+const updateGoal = async (req, res) => {
+  const userId = req.auth._id;
+  const user = await User.findById(userId);
+  req.user = user;
+  const { goal } = req.body;
+  const BMR = req.user.caloriesDayilyNorma;
+  let macroelementsProporsion = {};
+  const onePercent = BMR / 100;
+  const countGoal = (percForProtein, percForFat) => {
+    user.goal = goal;
+    macroelementsProporsion.protein = Math.round(onePercent * percForProtein);
+    macroelementsProporsion.fat = Math.round(onePercent * percForFat);
+    macroelementsProporsion.carbonohidrates =
+      BMR - macroelementsProporsion.protein - macroelementsProporsion.fat;
+    user.macroelementsProporsion = macroelementsProporsion;
+  };
+  if (goal == "Lose fat") {
+    countGoal(25, 20);
+  }
+  if (goal == "Maintain") {
+    countGoal(20, 25);
+  }
+  if (goal == "Gain Muscle") {
+    countGoal(30, 20);
+  }
+  await User.findByIdAndUpdate(userId, {
+    goal,
+    macroelementsProporsion,
+  });
+  res.json({ message: `goal updated` });
 };
 export default {
   updateUser: ctrlWrapper(updateUser),
+  updateGoal: ctrlWrapper(updateGoal),
 };

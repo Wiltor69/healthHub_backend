@@ -30,7 +30,7 @@ const userSchema = new Schema(
 
     waterDailyNorma: {
       type: Number,
-      default: 2000,
+      default: 2,
     },
     caloriesDayilyNorma: {
       type: Number,
@@ -41,6 +41,7 @@ const userSchema = new Schema(
 );
 userSchema.post("save", handleMongooseError);
 export const updateSchema = Joi.object({
+  goal: Joi.string(),
   userActivity: Joi.string(),
   gender: Joi.string(),
   age: Joi.number(),

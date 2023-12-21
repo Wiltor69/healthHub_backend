@@ -11,5 +11,10 @@ router.put(
   validateBody(updateSchema),
   userControllers.updateUser
 );
-
+router.put(
+  "/goal",
+  authenticate,
+  validateBody(updateSchema),
+  userControllers.updateGoal
+);
 export default router;

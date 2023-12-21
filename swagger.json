@@ -27,7 +27,6 @@
         "tags": ["Auth"],
         "summary": "User registration",
         "parameters": [],
-        "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Registration's object",
           "required": true,
@@ -64,6 +63,55 @@
           }
         }
       }
+    },
+    "/api/auth/signin": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User login",
+        "parameters": [],
+        "security": [{ "Bearer": "" }],
+        "requestBody": {
+          "description": "Login object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/loginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "message": "Email or password is wrong"
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -93,29 +141,70 @@
       "RegistrationResponse": {
         "type": "object",
         "properties": {
-          "type": "object",
-          "properties": {
-            "auth": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "type": "string",
-                  "description": "User's email",
-                  "format": "email"
-                },
-                "userId": {
-                  "type": "number",
-                  "description": "User's id",
-                  "example": "32143232436545474"
-                }
+          "auth": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "number",
+                "description": "User's name",
+                "example": "Illia"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
               }
             }
           }
         },
-        "example": [
-          { "name": "Philip", "email": "1@gmail.com", "userId": "1" },
-          { "name": "Mila", "email": "2@gmail.com", "userId": "2" }
-        ]
+        "example": {
+          "auth": {
+            "name": "illia",
+            "email": "user@gmail.com"
+          }
+        }
+      },
+      "loginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email",
+            "example": "laura@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "loginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "User's token"
+          },
+          "auth": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              }
+            }
+          }
+        },
+        "example": {
+          "token": "User's token",
+          "auth": {
+            "email": "user@gmail.com"
+          }
+        }
       }
     },
     "securitySchemes": {
