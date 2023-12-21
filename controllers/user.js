@@ -74,7 +74,7 @@ const updateUser = async (req, res) => {
 };
 
 const updateGoal = async (req, res) => {
-  const userId = req.auth._id;
+  const userId = req.user._id;
   const user = await User.findById(userId);
   req.user = user;
   const { goal } = req.body;
