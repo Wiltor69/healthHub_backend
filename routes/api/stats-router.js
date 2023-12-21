@@ -15,24 +15,24 @@ router.get("/today", statsControllers.getStatsForToday);
 
 router.get("/month/:monthNumber", statsControllers.getStatsForMonth);
 
-router.post("/addWater", waterAddValidate, statsControllers.addWater);
+router.post("/water-intake", waterAddValidate, statsControllers.addWater);
 
-router.post("/addMeal", mealAddValidate, statsControllers.addMeal);
+router.post("/food-intake", mealAddValidate, statsControllers.addMeal);
 
 router.delete(
-  "/deleteMeal/:mealId",
+  "/food-intake/:mealId",
   isValidId,
   statsControllers.deleteMealById
 );
 
 router.delete(
-  "/deleteWater/:waterId",
+  "/water-intake/:waterId",
   isValidId,
   statsControllers.deleteWaterById
 );
 
-router.patch(
-  "/updateMeal/:mealId",
+router.put(
+  "/food-intake/:mealId",
   isValidId,
   waterAddValidate,
   statsControllers.updateMealById
