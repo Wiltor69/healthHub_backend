@@ -6,8 +6,9 @@ import jwt from "jsonwebtoken";
 import crypto from "node:crypto";
 
 import { HttpError, ctrlWrapper } from "../helpers/index.js";
-// import { Auth } from "../models/auth.js";
+
 import { User } from "../models/user.js";
+
 const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
@@ -25,8 +26,6 @@ const register = async (req, res) => {
     password: hashPass,
 
     verificationCode,
-    // });
-    // const newUser = await User.create({
 
     goal: "Lose fat",
     gender: "Male",
@@ -95,39 +94,13 @@ const forgotPassword = async (req, res) => {
   const newPassword = crypto.randomUUID();
   const hashPass = await bcrypt.hash(password, 10);
   const { email } = req.body;
-  const auth = await User.findOne({ email });
+  const user = await User.findOne({ email });
   if (user.token !== "") {
     throw HttpError(400, "User is login");
   }
   await User.findByIdAndUpdate(user._id, { password: hashPass });
 
-  // const forPassEmail = ElasticEmail.EmailMessageData.constructFromObject({
-  //   Recipients: [new ElasticEmail.EmailRecipient(email)],
-  //   Content: {
-  //     Body: [
-  //       ElasticEmail.BodyPart.constructFromObject({
-  //         ContentType: "HTML",
-  //         Content: `If you forgot your password, use this one: ${newPassword}`,
-  //       }),
-  //     ],
-  //     Subject: "You forgot your password for login in Health app",
-  //     From:
-  //   },
-  // });
-
-  // api.emailsPost(forPassEmail);
-
   res.json({ message: "New password sent" });
-};
-
-const getCurrent = async (req, res) => {
-  const { email } = req.auth;
-
-  res.json({ email });
-};
-
-const creatAvatar = async (req, res) => {
-  const avatarURL = req.file.path;
 };
 
 export default {
@@ -135,7 +108,6 @@ export default {
   login: ctrlWrapper(login),
   updateSubscription: ctrlWrapper(updateSubscription),
   logout: ctrlWrapper(logout),
-  getCurrent: ctrlWrapper(getCurrent),
-  creatAvatar: ctrlWrapper(creatAvatar),
+
   forgotPassword: ctrlWrapper(forgotPassword),
 };

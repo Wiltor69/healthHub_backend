@@ -14,7 +14,7 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: async (req, file) => {
     const { originalname } = file;
-    const { _id: id } = req.auth;
+    const { _id: id } = req.user;
     let folder;
     if (file.fieldname === "avatarURL") {
       folder = "avatars";

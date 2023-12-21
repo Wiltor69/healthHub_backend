@@ -76,22 +76,22 @@ const userSchema = new Schema(
 );
 userSchema.post("save", handleMongooseError);
 
-export const registerSchema = Joi.object({
+const registerSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
 });
 
-export const loginSchema = Joi.object({
+const loginSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
 });
 
-export const updSubscriptionSchema = Joi.object({
+const updSubscriptionSchema = Joi.object({
   subscription: Joi.string().required(),
 });
 
-export const emailSchema = Joi.object({
+const emailSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
 });
 

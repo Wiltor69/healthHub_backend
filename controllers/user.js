@@ -91,6 +91,6 @@ const getUserCurrent = async (req, res) => {
 };
 
 export default {
-  updateUser: ctrlWrapper(updateUser),
   getUserCurrent: ctrlWrapper(getUserCurrent),
+  updateUser: ctrlWrapper(updateUser),
 };
