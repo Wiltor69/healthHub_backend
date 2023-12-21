@@ -1,7 +1,7 @@
 import express from "express";
 import ctrl from "../../controllers/auth.js";
 import { validateBody, authenticate, upload } from "../../middlewares/index.js";
-import { schemas } from "../../models/auth.js";
+import { schemas } from "../../models/user.js";
 
 const router = express.Router();
 
