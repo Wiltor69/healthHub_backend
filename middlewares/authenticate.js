@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { HttpError } from "../helpers/index.js";
-import { Auth } from "../models/auth.js";
+import { User } from "../models/user.js";
 const { SECRET_KEY } = process.env;
 
 const authenticate = async (req, res, next) => {
@@ -10,12 +10,12 @@ const authenticate = async (req, res, next) => {
 
   try {
     const { id } = jwt.verify(token, SECRET_KEY);
-    const auth = await Auth.findById(id);
-    if (!auth || !auth.token || auth.token !== token) {
+    const user = await User.findById(id);
+    if (!user || !user.token || user.token !== token) {
       next(HttpError(401));
     }
 
-    req.auth = auth;
+    req.user = user;
     next();
   } catch {
     next(HttpError(401));

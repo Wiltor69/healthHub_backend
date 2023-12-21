@@ -13,7 +13,7 @@ import ControllerWrapper from "../utils/ControllerWrapper.js";
 import formatTime from "../helpers/formatDateBD.js";
 
 const getStatsForMonth = async (req, res) => {
-  const { _id: owner } = req.auth;
+  const { _id: owner } = req.user;
   const { monthNumber } = req.params;
   const adjustedMonth = parseInt(monthNumber) - 1;
 
@@ -87,7 +87,7 @@ const getStatsForMonth = async (req, res) => {
 };
 
 const getStatsForToday = async (req, res) => {
-  const { _id: owner, waterDailyNorma, caloriesDayilyNorma } = req.auth;
+  const { _id: owner, waterDailyNorma, caloriesDayilyNorma } = req.user;
 
   const currentDate = new Date();
   const startOfDay = new Date(currentDate);
@@ -152,15 +152,15 @@ const getStatsForToday = async (req, res) => {
 };
 
 const addMeal = async (req, res) => {
-  const { _id: owner } = req.auth;
+  const { _id: owner } = req.user;
 
   const result = await Food.create({ owner, ...req.body });
   res.status(201).json(result);
 };
 
 const addWater = async (req, res) => {
-  console.log(req.auth);
-  const { _id: owner } = req.auth;
+  console.log(req.user);
+  const { _id: owner } = req.user;
 
   const result = await Water.create({ owner, ...req.body });
   res.status(201).json(result);
