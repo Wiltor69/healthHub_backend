@@ -9,7 +9,7 @@ router.post("/signup", validateBody(schemas.registerSchema), ctrl.register);
 router.post("/signin", validateBody(schemas.loginSchema), ctrl.login);
 
 router.post("/signout", authenticate, ctrl.logout);
-router.post("/avatar", authenticate, upload.single("avatar"), ctrl.creatAvatar);
+// router.post("/avatar", authenticate, upload.single("avatar"), ctrl.creatAvatar);
 router.post("/forgot-password", authenticate, ctrl.forgotPassword);
 
 export default router;
