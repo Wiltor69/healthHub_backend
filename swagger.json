@@ -69,7 +69,7 @@
         "tags": ["Auth"],
         "summary": "User login",
         "parameters": [],
-        "security": [{ "Bearer": "" }],
+        "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Login object",
           "required": true,
@@ -106,9 +106,7 @@
           },
           "500": {
             "description": "Internal Server Error",
-            "content": {
-              "message": "Email or password is wrong"
-            }
+            "content": {}
           }
         }
       }
