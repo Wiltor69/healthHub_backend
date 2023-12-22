@@ -41,10 +41,6 @@ const updateUser = async (req, res) => {
     userActivity = undefined,
   } = req.body;
 
-  if (name) {
-    user.name = name;
-  }
-
   if (age) {
     user.age = age;
     BMR = BMRMaleOrFemale(user, gender);
