@@ -35,7 +35,7 @@ const userSchema = new Schema(
     },
     waterDailyNorma: {
       type: Number,
-      default: 2000,
+      default: 2,
     },
     caloriesDayilyNorma: {
       type: Number,
@@ -53,7 +53,7 @@ const userSchema = new Schema(
     height: { type: Number },
     weight: { type: Number },
     userActivity: {
-      type: Number,
+      type: String,
       enum: activityList,
     },
     BMR: { type: Number },
