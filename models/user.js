@@ -35,7 +35,7 @@ const userSchema = new Schema(
     },
     waterDailyNorma: {
       type: Number,
-      default: 2000,
+      default: 2,
     },
     caloriesDayilyNorma: {
       type: Number,
@@ -102,6 +102,7 @@ const emailSchema = Joi.object({
 });
 
 export const updateSchema = Joi.object({
+  name: Joi.string(),
   goal: Joi.string(),
   userActivity: Joi.string(),
   gender: Joi.string(),

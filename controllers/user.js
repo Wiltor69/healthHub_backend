@@ -40,11 +40,9 @@ const updateUser = async (req, res) => {
     weight = undefined,
     userActivity = undefined,
   } = req.body;
-
   if (name) {
     user.name = name;
   }
-
   if (age) {
     user.age = age;
     BMR = BMRMaleOrFemale(user, gender);
@@ -57,8 +55,6 @@ const updateUser = async (req, res) => {
     user.weight = weight;
     BMR = BMRMaleOrFemale(user, gender);
     waterDailyNorma = user.weight * 0.03 + waterPlus(user.userActivity);
-
-    console.log(waterDailyNorma);
   }
   if (userActivity) {
     user.userActivity = userActivity;
@@ -69,7 +65,6 @@ const updateUser = async (req, res) => {
     user.gender = gender;
     BMR = BMRMaleOrFemale(user, gender);
   }
-  console.log(BMR);
   await User.findByIdAndUpdate(userId, {
     ...req.body,
     caloriesDayilyNorma: BMR,

@@ -19,6 +19,10 @@
     {
       "name": "Auth",
       "description": "Authorization endpoints"
+    },
+    {
+      "name": "User",
+      "description": "User's post and get endpoints"
     }
   ],
   "paths": {
@@ -69,7 +73,6 @@
         "tags": ["Auth"],
         "summary": "User login",
         "parameters": [],
-        "security": [{ "Bearer": "" }],
         "requestBody": {
           "description": "Login object",
           "required": true,
@@ -106,9 +109,79 @@
           },
           "500": {
             "description": "Internal Server Error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/auth/signout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User logout",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Successful operation",
+          "required": true,
+          "content": {}
+        },
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
             "content": {
-              "message": "Email or password is wrong"
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/logoutErrorResponse"
+                }
+              }
             }
+          }
+        }
+      }
+    },
+    "api/user/update": {
+      "put": {
+        "tags": ["User"],
+        "summary": "User update",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Successful operation",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/userUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "message": "user updated"
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {}
           }
         }
       }
@@ -203,6 +276,50 @@
           "token": "User's token",
           "auth": {
             "email": "user@gmail.com"
+          }
+        }
+      },
+      "logoutErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Unauthorized error"
+          }
+        }
+      },
+      "userUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "example": "Laura Jones"
+          },
+          "age": {
+            "type": "number",
+            "description": "User's age",
+            "example": "25"
+          },
+          "height": {
+            "type": "number",
+            "description": "User's height",
+            "example": "170"
+          },
+          "weight": {
+            "type": "number",
+            "description": "User's weight",
+            "example": "80"
+          },
+          "userActivity": {
+            "type": "number",
+            "description": "User's activity",
+            "example": "1.45"
+          },
+          "gender": {
+            "type": "string",
+            "description": "User's gender",
+            "example": "Female"
           }
         }
       }
