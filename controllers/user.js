@@ -1,5 +1,7 @@
 import { ctrlWrapper } from "../helpers/index.js";
 import { User } from "../models/user.js";
+// import { Auth } from "../models/auth.js";
+
 const BMRMaleOrFemale = (user, gender) => {
   if (gender == "Male") {
     return Math.round(
@@ -25,7 +27,7 @@ const waterPlus = (activity) => {
   }
 };
 const updateUser = async (req, res) => {
-  const userId = req.auth._id;
+  const userId = req.user._id;
   const user = await User.findById(userId);
 
   req.user = user;
@@ -72,7 +74,7 @@ const updateUser = async (req, res) => {
 };
 
 const updateGoal = async (req, res) => {
-  const userId = req.auth._id;
+  const userId = req.user._id;
   const user = await User.findById(userId);
   req.user = user;
   const { goal } = req.body;
@@ -102,7 +104,20 @@ const updateGoal = async (req, res) => {
   });
   res.json({ message: `goal updated` });
 };
+
+const getUserCurrent = async (req, res) => {
+  const id = req.user._id;
+  try {
+    const user = await User.findById(id).exec();
+
+    res.status(200).send(user);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export default {
+  getUserCurrent: ctrlWrapper(getUserCurrent),
   updateUser: ctrlWrapper(updateUser),
   updateGoal: ctrlWrapper(updateGoal),
 };
