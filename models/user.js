@@ -53,7 +53,7 @@ const userSchema = new Schema(
     height: { type: Number },
     weight: { type: Number },
     userActivity: {
-      type: Number,
+      type: String,
       enum: activityList,
     },
     BMR: { type: Number },
@@ -80,6 +80,12 @@ const registerSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
+  goal: Joi.string().valid("Lose fat", "Maintain", "Gain Muscle").required(),
+  gender: Joi.string().valid("Male", "Female").required(),
+  age: Joi.number().required(),
+  height: Joi.number().required(),
+  weight: Joi.number().required(),
+  userActivity: Joi.number(),
 });
 
 const loginSchema = Joi.object({

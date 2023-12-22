@@ -12,7 +12,18 @@ import { User } from "../models/user.js";
 const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
-  const { email, password } = req.body;
+  const {
+    email,
+    password,
+    name,
+    goal,
+    weight,
+    height,
+    age,
+    userActivity,
+    gender,
+  } = req.body;
+
   const user = await User.findOne({ email });
   if (user) {
     throw HttpError(409, "Email in use");
@@ -24,22 +35,19 @@ const register = async (req, res) => {
   const newUser = await User.create({
     ...req.body,
     password: hashPass,
-
     verificationCode,
-
-    goal: "Lose fat",
-    gender: "Male",
-    age: 20,
-    weight: 60,
-    height: 160,
-    userActivity: "1.25",
-    waterDailyNorma: 0,
   });
 
   res.status(201).json({
     user: {
       name: newUser.name,
       email: newUser.email,
+      goal: newUser.goal,
+      gender: newUser.gender,
+      age: newUser.age,
+      weight: newUser.weight,
+      height: newUser.height,
+      userActivity: newUser.userActivity,
     },
   });
 };
