@@ -13,9 +13,10 @@ const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
   const {
+    name,
     email,
     password,
-    name,
+
     goal,
     weight,
     height,
