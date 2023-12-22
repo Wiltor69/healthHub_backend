@@ -96,6 +96,7 @@ const emailSchema = Joi.object({
 });
 
 export const updateSchema = Joi.object({
+  name: Joi.string(),
   goal: Joi.string(),
   userActivity: Joi.string(),
   gender: Joi.string(),
