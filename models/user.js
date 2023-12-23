@@ -85,7 +85,7 @@ const registerSchema = Joi.object({
   age: Joi.number().required(),
   height: Joi.number().required(),
   weight: Joi.number().required(),
-  userActivity: Joi.number(),
+  userActivity: Joi.string(),
 });
 
 const loginSchema = Joi.object({
