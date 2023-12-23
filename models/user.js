@@ -101,6 +101,10 @@ const emailSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
 });
 
+const forgotPassword = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+});
+
 export const updateSchema = Joi.object({
   name: Joi.string(),
   goal: Joi.string(),
@@ -122,6 +126,7 @@ export const schemas = {
   loginSchema,
   updSubscriptionSchema,
   emailSchema,
+  forgotPassword,
 };
 export const User = model("user", userSchema);
 // module.exports = { User, updateSchema };

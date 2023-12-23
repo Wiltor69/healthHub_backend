@@ -1,6 +1,6 @@
 import express from "express";
 import ctrl from "../../controllers/auth.js";
-import { validateBody, authenticate, upload } from "../../middlewares/index.js";
+import { validateBody, authenticate } from "../../middlewares/index.js";
 import { schemas } from "../../models/user.js";
 
 const router = express.Router();
@@ -10,6 +10,11 @@ router.post("/signin", validateBody(schemas.loginSchema), ctrl.login);
 
 router.post("/signout", authenticate, ctrl.logout);
 
-router.post("/forgot-password", authenticate, ctrl.forgotPassword);
+router.post(
+  "/forgot-password",
+  authenticate,
+  validateBody(schemas.forgotPassword),
+  ctrl.forgotPassword
+);
 
 export default router;
