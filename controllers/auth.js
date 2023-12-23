@@ -1,11 +1,9 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-// import Jimp from  "jimp";
 
-// import gravatar from  "gravatar";
 import crypto from "node:crypto";
-
-import { HttpError, ctrlWrapper } from "../helpers/index.js";
+// import nodemailer from "nodemailer";
+import { HttpError, ctrlWrapper, sendEmail } from "../helpers/index.js";
 
 import { User } from "../models/user.js";
 
@@ -91,25 +89,54 @@ const updateSubscription = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-  const { _id } = req.user;
-  await User.findByIdAndUpdate(_id, { token: "" });
+  const { token } = req.user;
+  await User.findOneAndUpdate({ token }, { token: "" });
 
-  res.status(204).json({
+  res.json({
     message: "Logout success",
   });
 };
 
 const forgotPassword = async (req, res) => {
-  const newPassword = crypto.randomUUID();
-  const hashPass = await bcrypt.hash(password, 10);
   const { email } = req.body;
-  const user = await User.findOne({ email });
-  if (user.token !== "") {
-    throw HttpError(400, "User is login");
-  }
-  await User.findByIdAndUpdate(user._id, { password: hashPass });
 
-  res.json({ message: "New password sent" });
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw HttpError(404, "User not found");
+  }
+
+  const { name } = user;
+
+  const newPassword = crypto.randomBytes(8).toString("hex");
+  const hashPassword = await bcrypt.hash(newPassword, 10);
+
+  const newPasswordEmail = {
+    to: email,
+    subject: "Your new password",
+    html: `
+        <h1>Hello ${name},</h1>
+        <p>Your password has been reset. Here is your new password: <strong>${newPassword}</strong></p>
+        <p>Please log in and change your password immediately.</p>
+        <p>Best regards,<br>Your dream Team</p>
+      `,
+  };
+
+  await sendEmail(newPasswordEmail);
+
+  const userUpdate = await User.findOneAndUpdate(
+    { email },
+    { password: hashPassword }
+  );
+
+  if (!userUpdate) {
+    throw HttpError(404, "User not found");
+  }
+
+  res.status(200).json({
+    message:
+      "Password updated successfully. Check your email for the new password.",
+  });
 };
 
 export default {
