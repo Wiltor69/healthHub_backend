@@ -114,9 +114,7 @@ const forgotPassword = async (req, res) => {
     throw HttpError(404, "User not found");
   }
 
-  if (user.token !== "") {
-    throw HttpError(400, "User has already logged in");
-  }
+  
 
   const { name } = user;
 
@@ -137,7 +135,7 @@ const forgotPassword = async (req, res) => {
   await emailSend(newPassEmail);
 
   const userUpdate = await User.findOneAndUpdate(
-    // user._id,
+    
     { email },
     { password: hashPassword }
   );
