@@ -37,7 +37,15 @@ const register = async (req, res) => {
     verificationCode,
   });
 
+  const payload = {
+    id: newUser._id,
+  };
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "30d" });
+
+  await User.findOneAndUpdate(newUser._id, { token });
+
   res.status(201).json({
+    token,
     user: {
       name: newUser.name,
       email: newUser.email,
