@@ -13,7 +13,7 @@ router.post("/signout", authenticate, ctrl.logout);
 router.post(
   "/forgot-password",
   authenticate,
-  validateBody(schemas.forgotPassword),
+  //   validateBody(schemas.forgotPassword),
   ctrl.forgotPassword
 );
 
