@@ -16,9 +16,9 @@ const config = {
 
 const transport = nodemailer.createTransport(config);
 
-const sendEmail = (data) => {
+const emailSend = (data) => {
   const email = { ...data, from: EMAIL };
   return transport.sendMail(email);
 };
 
-export default sendEmail;
+export default emailSend;
