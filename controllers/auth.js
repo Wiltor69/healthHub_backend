@@ -133,7 +133,8 @@ const forgotPassword = async (req, res) => {
   await emailSend(newPassEmail);
 
   const userUpdate = await User.findOneAndUpdate(
-    { email },
+    req.body,
+    // { email },
     { password: hashPassword }
   );
 
