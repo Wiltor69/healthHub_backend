@@ -30,11 +30,25 @@ const register = async (req, res) => {
   const hashPass = await bcrypt.hash(password, 10);
 
   const verificationCode = crypto.randomUUID();
-
+  const dateNow = new Date();
+  const monthNow = dateNow.getMonth();
+  const dayNow = dateNow.getDate();
+  const arrForWholeTime = [
+    {
+      month: monthNow + 1,
+      dates: [
+        {
+          date: dayNow,
+          weight,
+        },
+      ],
+    },
+  ];
   const newUser = await User.create({
     ...req.body,
     password: hashPass,
     verificationCode,
+    arrForWholeTime,
   });
 
   const payload = {

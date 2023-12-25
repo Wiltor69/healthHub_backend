@@ -3,11 +3,10 @@ import { validateBody, upload } from "../../middlewares/index.js";
 import { updateSchema } from "../../models/user.js";
 import authenticate from "../../middlewares/authenticate.js";
 import ctrl from "../../controllers/user.js";
-
 const router = express.Router();
 
 router.get("/current", authenticate, ctrl.getUserCurrent);
-
+router.post("/weight", authenticate, ctrl.changeWeight);
 router.put(
   "/update",
   authenticate,

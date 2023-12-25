@@ -71,6 +71,23 @@ const userSchema = new Schema(
       type: Number,
       default: 2000,
     },
+    arrForWholeTime: [
+      {
+        month: {
+          type: Number,
+        },
+        dates: [
+          {
+            date: {
+              type: Number,
+            },
+            weight: {
+              type: Number,
+            },
+          },
+        ],
+      },
+    ],
   },
   { versionKey: false, timestamps: true }
 );

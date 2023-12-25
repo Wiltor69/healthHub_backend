@@ -1,6 +1,5 @@
 import { ctrlWrapper } from "../helpers/index.js";
 import { User } from "../models/user.js";
-
 const BMRMaleOrFemale = (user, gender) => {
   if (gender == "Male") {
     return Math.round(
@@ -55,6 +54,24 @@ const updateUser = async (req, res) => {
     user.weight = weight;
     BMR = BMRMaleOrFemale(user, gender);
     waterDailyNorma = user.weight * 0.03 + waterPlus(user.userActivity);
+    const dateNow = new Date();
+    const monthNow = dateNow.getMonth();
+    const dayNow = dateNow.getDate();
+    const arrForWholeTime = req.user.arrForWholeTime;
+    const needMonth = arrForWholeTime.find(
+      (year) => year.month == monthNow + 1
+    ).dates;
+    let needDay = needMonth.find((day) => day.date == dayNow).weight;
+    needDay = weight;
+    req.user.arrForWholeTime
+      .find((year) => year.month == monthNow + 1)
+      .dates.find((day) => day.date == dayNow).weight = needDay;
+    user.arrForWholeTime = req.user.arrForWholeTime;
+    console.log(
+      req.user.arrForWholeTime
+        .find((year) => year.month == monthNow + 1)
+        .dates.find((day) => day.date == dayNow).weight
+    );
   }
   if (userActivity) {
     user.userActivity = userActivity;
@@ -127,10 +144,86 @@ const updateAvatar = async (req, res) => {
   await User.findByIdAndUpdate(_id, { avatarURL }, { new: true }).exec();
   res.status(200).json({ avatarURL, message: "User's avatar updated" });
 };
+async function doSomethingEveryDay() {
+  const dateNow = new Date();
+  const monthNow = dateNow.getMonth();
+  const dayNow = dateNow.getDate();
+  const userId = req.user._id;
+  const user = await User.findById(userId);
+  req.user = user;
+  const weight = req.user;
+  const arrForWholeTime = req.user.arrForWholeTime;
+  if (arrForWholeTime.find((year) => year.month == monthNow + 1)) {
+    const newDay = {
+      date: dayNow,
+      weight,
+    };
+    req.user.arrForWholeTime
+      .find((year) => year.month == monthNow + 1)
+      .dates.push(newDay);
+  } else {
+    const newMonth = {
+      month: monthNow + 1,
+      dates: [
+        {
+          date: dayNow,
+          weight,
+        },
+      ],
+    };
+    req.user.arrForWholeTime.push(newMonth);
+  }
+  await User.findByIdAndUpdate(userId, {
+    arrForWholeTime: req.user.arrForWholeTime,
+  });
+}
+
+function checkAndExecute() {
+  // Отримуємо поточний час
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMinutes = now.getMinutes();
+
+  // Перевірка, чи настав новий день
+  if (currentHour === 0 && currentMinutes === 0) {
+    // Викликаємо функцію, якщо настав новий день
+    doSomethingEveryDay();
+  }
+}
+
+// Визиваємо функцію кожну хвилину
+setInterval(checkAndExecute, 60000);
+const changeWeight = async (req, res) => {
+  const { weight } = req.body;
+  const dateNow = new Date();
+  const monthNow = dateNow.getMonth();
+  const dayNow = dateNow.getDate();
+  const userId = req.user._id;
+  const user = await User.findById(userId);
+  req.user = user;
+  const arrForWholeTime = req.user.arrForWholeTime;
+  const needMonth = arrForWholeTime.find(
+    (year) => year.month == monthNow + 1
+  ).dates;
+  let needDay = needMonth.find((day) => day.date == dayNow).weight;
+  needDay = weight;
+  req.user.arrForWholeTime
+    .find((year) => year.month == monthNow + 1)
+    .dates.find((day) => day.date == dayNow).weight = needDay;
+  await User.findByIdAndUpdate(userId, {
+    arrForWholeTime: req.user.arrForWholeTime,
+  });
+  res.json({
+    arrForWholeTime: req.user.arrForWholeTime.find(
+      (year) => year.month == monthNow + 1
+    ),
+  });
+};
 
 export default {
   getUserCurrent: ctrlWrapper(getUserCurrent),
   updateUser: ctrlWrapper(updateUser),
   updateGoal: ctrlWrapper(updateGoal),
   updateAvatar: ctrlWrapper(updateAvatar),
+  changeWeight: ctrlWrapper(changeWeight),
 };
