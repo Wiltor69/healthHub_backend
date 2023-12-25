@@ -86,6 +86,7 @@ const updateUser = async (req, res) => {
     ...req.body,
     caloriesDayilyNorma: BMR,
     waterDailyNorma,
+    arrForWholeTime: req.user.arrForWholeTime,
   });
   res.json({ message: `user updated` });
 };
