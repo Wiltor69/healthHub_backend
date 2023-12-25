@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 
 import crypto from "node:crypto";
 // import nodemailer from "nodemailer";
-import { HttpError, ctrlWrapper, sendEmail } from "../helpers/index.js";
+import { HttpError, ctrlWrapper, emailSend } from "../helpers/index.js";
 
 import { User } from "../models/user.js";
 
@@ -130,24 +130,25 @@ const forgotPassword = async (req, res) => {
 
   const { name } = user;
 
-  const newPassword = crypto.randomBytes(8).toString("hex");
+  const newPassword = crypto.randomBytes(6).toString("hex");
   const hashPassword = await bcrypt.hash(newPassword, 10);
 
-  const newPasswordEmail = {
+  const newPassEmail = {
     to: email,
-    subject: "Your new password",
+    subject: "Ihr neues Passwort",
     html: `
-        <h1>Hello ${name},</h1>
-        <p>Your password has been reset. Here is your new password: <strong>${newPassword}</strong></p>
-        <p>Please log in and change your password immediately.</p>
-        <p>Best regards,<br>Your dream Team</p>
+        <h1>Hallo ${name},</h1>
+        <p>Dein Passwort wurde zurück gesetzt. Hier ist Ihr neues Passwort: <strong>${newPassword}</strong></p>
+        <p>Bitte loggen Sie sich ein und ändern Sie umgehend Ihr Passwort.</p>
+        <p>Beste grüße,<br>Ihr Traumteam</p>
       `,
   };
 
-  await sendEmail(newPasswordEmail);
+  await emailSend(newPassEmail);
 
   const userUpdate = await User.findOneAndUpdate(
-    { email },
+    req.body,
+    // { email },
     { password: hashPassword }
   );
 

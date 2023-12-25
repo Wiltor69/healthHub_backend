@@ -10,11 +10,6 @@ router.post("/signin", validateBody(schemas.loginSchema), ctrl.login);
 
 router.post("/signout", authenticate, ctrl.logout);
 
-router.post(
-  "/forgot-password",
-  authenticate,
-  //   validateBody(schemas.forgotPassword),
-  ctrl.forgotPassword
-);
+router.post("/forgot-password", ctrl.forgotPassword);
 
 export default router;
