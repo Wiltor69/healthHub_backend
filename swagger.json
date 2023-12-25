@@ -23,6 +23,10 @@
     {
       "name": "User",
       "description": "User's post and get endpoints"
+    },
+    {
+      "name": "Recommended food",
+      "description": "Get endpoint for recomended food"
     }
   ],
   "paths": {
@@ -143,7 +147,7 @@
         }
       }
     },
-    "api/user/update": {
+    "/api/user/update": {
       "put": {
         "tags": ["User"],
         "summary": "User update",
@@ -151,7 +155,7 @@
         "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Successful operation",
-          "required": false,
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
@@ -164,7 +168,11 @@
           "200": {
             "description": "Successful operation",
             "content": {
-              "message": "user updated"
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/userUpdateResponse"
+                }
+              }
             }
           },
           "400": {
@@ -185,13 +193,93 @@
           }
         }
       }
+    },
+    "/api/user/goal": {
+      "put": {
+        "tags": ["User"],
+        "summary": "User's goal update",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Goal",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/userGoalRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/userUpdateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/recommended-food": {
+      "get": {
+        "tags": ["Recommended food"],
+        "summary": "Recommended food",
+        "parameters": [],
+        "requestBody": {
+          "description": "nothing",
+          "required": false,
+          "content": {}
+        },
+        "responses": {
+          "200": {
+            "description": "Recommended food",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/recommendedFoodRequest"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
       "RegistrationRequest": {
         "type": "object",
-        "required": ["name", "email", "password"],
+        "required": [
+          "name",
+          "email",
+          "password",
+          "weight",
+          "height",
+          "age",
+          "gender",
+          "goal"
+        ],
         "properties": {
           "name": {
             "type": "string",
@@ -208,6 +296,36 @@
             "type": "string",
             "description": "User's password",
             "example": "qwerty123"
+          },
+          "weight": {
+            "type": "number",
+            "description": "User's weight",
+            "example": 85
+          },
+          "height": {
+            "type": "number",
+            "description": "User's height",
+            "example": 175
+          },
+          "age": {
+            "type": "number",
+            "description": "User's age",
+            "example": 25
+          },
+          "gender": {
+            "type": "string",
+            "description": "User's gender",
+            "example": "Female"
+          },
+          "goal": {
+            "type": "string",
+            "description": "User's goal",
+            "example": "Maintain"
+          },
+          "userActivity": {
+            "type": "number",
+            "description": "User's activity",
+            "example": 1.85
           }
         }
       },
@@ -320,6 +438,69 @@
             "type": "string",
             "description": "User's gender",
             "example": "Female"
+          }
+        }
+      },
+      "userUpdateResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "user updated"
+          }
+        }
+      },
+      "userGoalRequest": {
+        "type": "object",
+        "properties": {
+          "goal": {
+            "description": "User's goal",
+            "type": "string",
+            "example": "Maintain"
+          }
+        }
+      },
+      "recommendedFoodRequest": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "nutrition": {
+              "type": "object",
+              "properties": {
+                "carbohydrates": {
+                  "type": "number",
+                  "example": 14
+                },
+                "protein": {
+                  "type": "number",
+                  "example": 0.3
+                },
+                "fat": {
+                  "type": "number",
+                  "example": 0.2
+                }
+              }
+            },
+            "_id": {
+              "type": "string",
+              "example": "657d864f71d0552dc86ee08c"
+            },
+            "name": {
+              "type": "string",
+              "example": "Apple"
+            },
+            "amount": {
+              "type": "string",
+              "example": "100 g"
+            },
+            "img": {
+              "type": "string",
+              "example": "https://ftp.goit.study/img/you_health/Strawberries.png"
+            },
+            "calories": {
+              "type": "number"
+            }
           }
         }
       }
