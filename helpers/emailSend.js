@@ -1,17 +1,15 @@
 import nodemailer from "nodemailer";
 import "dotenv/config";
 
-const { EMAIL, EMAIL_PASSWORD } = process.env;
+const { MAILTRAP_USER, EMAIL, MAILTRAP_PASSWORD } = process.env;
 
 const config = {
-  host: "smtp.ukr.net",
-  port: 465,
-  secure: true,
+  host: "sandbox.smtp.mailtrap.io",
+  port: 2525,
   auth: {
-    user: EMAIL,
-    pass: EMAIL_PASSWORD,
+    user: MAILTRAP_USER,
+    pass: MAILTRAP_PASSWORD,
   },
-  tls: { rejectUnauthorized: false },
 };
 
 const transport = nodemailer.createTransport(config);
