@@ -114,8 +114,6 @@ const forgotPassword = async (req, res) => {
     throw HttpError(404, "User not found");
   }
 
-  
-
   const { name } = user;
 
   const newPassword = crypto.randomBytes(6).toString("hex");
@@ -135,8 +133,8 @@ const forgotPassword = async (req, res) => {
   await emailSend(newPassEmail);
 
   const userUpdate = await User.findOneAndUpdate(
-    
-    { email },
+    req.body,
+    // { email },
     { password: hashPassword }
   );
 
