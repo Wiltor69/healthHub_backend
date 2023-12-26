@@ -53,7 +53,11 @@ const updateUser = async (req, res) => {
   if (weight) {
     user.weight = weight;
     BMR = BMRMaleOrFemale(user, gender);
-    waterDailyNorma = user.weight * 0.03 + waterPlus(user.userActivity);
+    waterDailyNorma = (
+      user.weight * 0.03 +
+      waterPlus(user.userActivity)
+    ).toFixed(1);
+    console.log(waterDailyNorma);
     const dateNow = new Date();
     const monthNow = dateNow.getMonth();
     const dayNow = dateNow.getDate();
@@ -67,16 +71,11 @@ const updateUser = async (req, res) => {
       .find((year) => year.month == monthNow + 1)
       .dates.find((day) => day.date == dayNow).weight = needDay;
     user.arrForWholeTime = req.user.arrForWholeTime;
-    console.log(
-      req.user.arrForWholeTime
-        .find((year) => year.month == monthNow + 1)
-        .dates.find((day) => day.date == dayNow).weight
-    );
   }
   if (userActivity) {
     user.userActivity = userActivity;
     BMR = BMRMaleOrFemale(user, gender);
-    waterDailyNorma = user.weight * 0.3 + waterPlus(user.userActivity);
+    waterDailyNorma = user.weight * 0.03 + waterPlus(user.userActivity);
   }
   if (gender) {
     user.gender = gender;
@@ -146,37 +145,56 @@ const updateAvatar = async (req, res) => {
   res.status(200).json({ avatarURL, message: "User's avatar updated" });
 };
 async function doSomethingEveryDay() {
-  const dateNow = new Date();
-  const monthNow = dateNow.getMonth();
-  const dayNow = dateNow.getDate();
-  const userId = req.user._id;
-  const user = await User.findById(userId);
-  req.user = user;
-  const weight = req.user;
-  const arrForWholeTime = req.user.arrForWholeTime;
-  if (arrForWholeTime.find((year) => year.month == monthNow + 1)) {
-    const newDay = {
-      date: dayNow,
-      weight,
-    };
-    req.user.arrForWholeTime
-      .find((year) => year.month == monthNow + 1)
-      .dates.push(newDay);
-  } else {
-    const newMonth = {
-      month: monthNow + 1,
-      dates: [
-        {
+  try {
+    const dateNow = new Date();
+    const monthNow = dateNow.getMonth() + 1;
+    const dayNow = dateNow.getDate();
+
+    // Fetch all users from the database
+    const allUsers = await User.find();
+
+    // Loop through each user and update their information
+    const updatePromises = allUsers.map(async (user) => {
+      const weight = user.weight;
+      const arrForWholeTime = user.arrForWholeTime || [];
+
+      const monthEntry = arrForWholeTime.find(
+        (entry) => entry.month === monthNow
+      );
+
+      if (monthEntry) {
+        const newDay = {
           date: dayNow,
           weight,
-        },
-      ],
-    };
-    req.user.arrForWholeTime.push(newMonth);
+        };
+        monthEntry.dates.push(newDay);
+      } else {
+        const newMonth = {
+          month: monthNow,
+          dates: [
+            {
+              date: dayNow,
+              weight,
+            },
+          ],
+        };
+        arrForWholeTime.push(newMonth);
+      }
+
+      // Update the user document in the database
+      return User.findByIdAndUpdate(user._id, {
+        arrForWholeTime,
+      });
+    });
+
+    // Wait for all updates to complete
+    await Promise.all(updatePromises);
+
+    console.log("All user documents updated successfully.");
+  } catch (error) {
+    console.error("Error updating user documents:", error);
+    throw error; // Re-throw the error for further handling
   }
-  await User.findByIdAndUpdate(userId, {
-    arrForWholeTime: req.user.arrForWholeTime,
-  });
 }
 
 function checkAndExecute() {
@@ -186,7 +204,7 @@ function checkAndExecute() {
   const currentMinutes = now.getMinutes();
 
   // Перевірка, чи настав новий день
-  if (currentHour === 0 && currentMinutes === 0) {
+  if (currentHour === 0 && currentMinutes === 18) {
     // Викликаємо функцію, якщо настав новий день
     doSomethingEveryDay();
   }

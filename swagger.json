@@ -3,7 +3,7 @@
   "info": {
     "version": "2.0.0",
     "title": "Swagger for healthhub_backend",
-    "description": "Showing off swagger-ui-express",
+    "description": "",
     "license": {
       "name": "MIT",
       "url": "https://opensource.org/licenses/MIT"
@@ -27,6 +27,10 @@
     {
       "name": "Recommended food",
       "description": "Get endpoint for recomended food"
+    },
+    {
+      "name": "Stats",
+      "description": "Endpoints for today's and month's requests for water and calories"
     }
   ],
   "paths": {
@@ -258,6 +262,264 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/recommendedFoodRequest"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/stats/food-intake": {
+      "post": {
+        "tags": ["Stats"],
+        "summary": "endpoint to add meal",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Meal object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addFoodIntakeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/addFoodIntakeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/stats/water-intake": {
+      "post": {
+        "tags": ["Stats"],
+        "summary": "endpoint to add water",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "water object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addWaterIntakeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/addWaterIntakeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/stats/today": {
+      "get": {
+        "tags": ["Stats"],
+        "summary": "endpoint to get meal and water for today",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "nothing",
+          "required": false,
+          "content": {}
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/foodIntakeForTodayResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/stats/water-intake/{waterId}": {
+      "delete": {
+        "tags": ["Stats"],
+        "summary": "endpoint to delete water",
+        "parameters": [
+          {
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "water id to delete",
+            "name": "waterId"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Nothing",
+          "required": false,
+          "content": {}
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/logoutErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/stats/food-intake/{mealId}": {
+      "delete": {
+        "tags": ["Stats"],
+        "summary": "endpoint to delete food by id",
+        "parameters": [
+          {
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Meal id to delete",
+            "name": "mealId"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Nothing",
+          "required": false,
+          "content": {}
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/logoutErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/user/current": {
+      "get": {
+        "tags": ["User"],
+        "summary": "endpoint to get all user's data",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Nothing",
+          "required": false,
+          "content": {}
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/userCurrentResponse"
                 }
               }
             }
@@ -502,6 +764,279 @@
               "type": "number"
             }
           }
+        }
+      },
+      "addFoodIntakeRequest": {
+        "type": "object",
+        "required": [
+          "dishName",
+          "mealType",
+          "calories",
+          "date",
+          "carbonohidrates",
+          "fat",
+          "protein"
+        ],
+        "properties": {
+          "dishName": {
+            "type": "string",
+            "example": "candy"
+          },
+          "mealType": {
+            "type": "string",
+            "example": "lunch"
+          },
+          "calories": {
+            "type": "string",
+            "example": "10"
+          },
+          "date": {
+            "type": "string",
+            "example": "2023-02-03T16:48:00.000+00:00"
+          },
+          "carbonohidrates": {
+            "type": "string",
+            "example": "6"
+          },
+          "fat": {
+            "type": "string",
+            "example": "2"
+          },
+          "protein": {
+            "type": "string",
+            "example": "2"
+          }
+        }
+      },
+      "addFoodIntakeResponse": {
+        "type": "object",
+
+        "properties": {
+          "owner": {
+            "type": "string",
+            "example": "65884ced88b13a7d9a34cb98"
+          },
+          "dishName": {
+            "type": "string",
+            "example": "candy"
+          },
+          "mealType": {
+            "type": "string",
+            "example": "lunch"
+          },
+          "carbonohidrates": {
+            "type": "string",
+            "example": "6"
+          },
+          "fat": {
+            "type": "string",
+            "example": "2"
+          },
+          "protein": {
+            "type": "string",
+            "example": "2"
+          },
+          "calories": {
+            "type": "string",
+            "example": "10"
+          },
+          "date": {
+            "type": "string",
+            "example": "2023-02-03T16:48:00.000+00:00"
+          },
+          "_id": {
+            "type": "string",
+            "example": "6589ea8caa9f8d69a6a9eb74"
+          },
+          "__v": {
+            "type": "number",
+            "example": 0
+          }
+        }
+      },
+      "addWaterIntakeRequest": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "string",
+            "example": "1"
+          },
+          "date": {
+            "type": "string",
+            "example": "2023-12-24T13:39:33.737+00:00"
+          }
+        }
+      },
+      "addWaterIntakeResponse": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "date": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "__v": {
+            "type": "number"
+          }
+        }
+      },
+      "foodIntakeForTodayResponse": {
+        "type": "object",
+        "properties": {
+          "food": {
+            "type": "object",
+            "properties": {
+              "foodServings": {
+                "type": "array"
+              },
+              "caloriesDayilyNorma": {
+                "type": "number"
+              },
+              "caloriesAmount": {
+                "type": "number"
+              },
+              "fatAmount": {
+                "type": "number"
+              },
+              "proteinAmount": {
+                "type": "number"
+              },
+              "carbonohidratesAmount": {
+                "type": "number"
+              },
+              "caloriesLeft": {
+                "type": "number"
+              },
+              "fatLeft": {
+                "type": "number"
+              },
+              "proteinLeft": {
+                "type": "number"
+              },
+              "carbonohidratesLeft": {
+                "type": "number"
+              }
+            }
+          },
+          "water": {
+            "type": "object",
+            "properties": {
+              "waterDailyNorma": {
+                "type": "number"
+              },
+              "dailyNormFulfillment": {
+                "type": "number"
+              },
+              "waterLeft": {
+                "type": "number"
+              },
+              "waterAmount": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      },
+      "forgotPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email",
+            "example": "laura@gmail.com"
+          }
+        }
+      },
+      "userCurrentResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "avatarURL": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          },
+          "waterDailyNorma": {
+            "type": "number"
+          },
+          "caloriesDayilyNorma": {
+            "type": "number"
+          },
+          "goal": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string"
+          },
+          "age": {
+            "type": "number"
+          },
+          "height": {
+            "type": "number"
+          },
+          "weight": {
+            "type": "number"
+          },
+          "userActivity": {
+            "type": "string"
+          },
+          "arrForWholeTime": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "month": {
+                  "type": "number"
+                },
+                "dates": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "date": {
+                        "type": "number"
+                      },
+                      "weight": {
+                        "type": "number"
+                      },
+                      "_id": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "_id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
         }
       }
     },
