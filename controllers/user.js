@@ -1,5 +1,6 @@
 import { ctrlWrapper } from "../helpers/index.js";
 import { User } from "../models/user.js";
+import { Weight } from "../models/weight.js";
 const BMRMaleOrFemale = (user, gender) => {
   if (gender == "Male") {
     return Math.round(
@@ -194,13 +195,14 @@ function checkAndExecute() {
 
 // Визиваємо функцію кожну хвилину
 setInterval(checkAndExecute, 60000);
+
 const changeWeight = async (req, res) => {
   const { weight } = req.body;
   const dateNow = new Date();
   const monthNow = dateNow.getMonth();
   const dayNow = dateNow.getDate();
   const userId = req.user._id;
-  const user = await User.findById(userId);
+  const user = await Weight.findById(userId);
   req.user = user;
   const arrForWholeTime = req.user.arrForWholeTime;
   const needMonth = arrForWholeTime.find(
@@ -211,7 +213,7 @@ const changeWeight = async (req, res) => {
   req.user.arrForWholeTime
     .find((year) => year.month == monthNow + 1)
     .dates.find((day) => day.date == dayNow).weight = needDay;
-  await User.findByIdAndUpdate(userId, {
+  await Weight.findByIdAndUpdate(userId, {
     arrForWholeTime: req.user.arrForWholeTime,
   });
   res.json({
