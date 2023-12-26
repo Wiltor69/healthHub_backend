@@ -25,11 +25,7 @@ router.delete(
   statsControllers.deleteMealById
 );
 
-router.delete(
-  "/water-intake/:waterId",
-  isValidId,
-  statsControllers.deleteWaterById
-);
+router.delete("/water-intake", statsControllers.deleteAllWater);
 
 router.put(
   "/food-intake/:mealId",

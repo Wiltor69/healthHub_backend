@@ -171,9 +171,13 @@ const addWater = async (req, res) => {
   res.status(201).json(result);
 };
 
-const deleteWaterById = async (req, res) => {
+const deleteAllWater = async (req, res) => {
   const { waterId } = req.params;
-  const result = await Water.findByIdAndDelete(waterId);
+  const { _id: owner } = req.user;
+
+  // const result = await Water.findByIdAndDelete(waterId);
+  const result = await Water.deleteMany({ owner });
+  console.log(result);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -197,7 +201,7 @@ const deleteMealById = async (req, res) => {
 
 const updateMealById = async (req, res) => {
   const { mealId } = req.params;
-  const result = await Water.findByIdAndUpdate(mealId, req.body, {
+  const result = await Food.findByIdAndUpdate(mealId, req.body, {
     new: true,
   });
   if (!result) {
@@ -207,7 +211,7 @@ const updateMealById = async (req, res) => {
 };
 
 export default {
-  deleteWaterById: ControllerWrapper(deleteWaterById),
+  deleteAllWater: ControllerWrapper(deleteAllWater),
   deleteMealById: ControllerWrapper(deleteMealById),
 
   addWater: ControllerWrapper(addWater),
