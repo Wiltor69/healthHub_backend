@@ -60,19 +60,23 @@ const getStatsForMonth = async (req, res) => {
 
   const waterResult = filteredWaterArray.map((array) => {
     const formattedDate = formatDate(array[0].date);
-
+    // console.log(array);
     return {
       data: formattedDate,
-      water: array,
+      water: calculateAmount.calculateWaterAmount(array),
     };
   });
+
+  console.log(waterResult);
 
   const foodResult = filteredFoodArray.map((array) => {
     const formattedDate = formatDate(array[0].date);
 
+    // console.log(array);
+
     return {
       data: formattedDate,
-      food: array,
+      food: calculateAmount.calculateCaloriesAmount(array),
     };
   });
 
@@ -163,6 +167,7 @@ const addWater = async (req, res) => {
   const { _id: owner } = req.user;
 
   const result = await Water.create({ owner, ...req.body });
+  console.log(result);
   res.status(201).json(result);
 };
 
