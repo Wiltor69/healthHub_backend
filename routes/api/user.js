@@ -6,7 +6,7 @@ import ctrl from "../../controllers/user.js";
 const router = express.Router();
 
 router.get("/current", authenticate, ctrl.getUserCurrent);
-router.post("/weight", authenticate, ctrl.changeWeight);
+router.get("/weight/:month", authenticate, ctrl.getMonthWeight);
 router.put(
   "/update",
   authenticate,

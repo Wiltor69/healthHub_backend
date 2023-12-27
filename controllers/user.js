@@ -212,37 +212,42 @@ function checkAndExecute() {
 
 // Визиваємо функцію кожну хвилину
 setInterval(checkAndExecute, 60000);
-const changeWeight = async (req, res) => {
-  const { weight } = req.body;
-  const dateNow = new Date();
-  const monthNow = dateNow.getMonth();
-  const dayNow = dateNow.getDate();
-  const userId = req.user._id;
-  const user = await User.findById(userId);
-  req.user = user;
+// const changeWeight = async (req, res) => {
+//   const { weight } = req.body;
+//   const dateNow = new Date();
+//   const monthNow = dateNow.getMonth();
+//   const dayNow = dateNow.getDate();
+//   const userId = req.user._id;
+//   const user = await User.findById(userId);
+//   req.user = user;
+//   const arrForWholeTime = req.user.arrForWholeTime;
+//   const needMonth = arrForWholeTime.find(
+//     (year) => year.month == monthNow + 1
+//   ).dates;
+//   let needDay = needMonth.find((day) => day.date == dayNow).weight;
+//   needDay = weight;
+//   req.user.arrForWholeTime
+//     .find((year) => year.month == monthNow + 1)
+//     .dates.find((day) => day.date == dayNow).weight = needDay;
+//   await User.findByIdAndUpdate(userId, {
+//     arrForWholeTime: req.user.arrForWholeTime,
+//   });
+//   res.json({
+//     arrForWholeTime: req.user.arrForWholeTime.find(
+//       (year) => year.month == monthNow + 1
+//     ),
+//   });
+// };
+const getMonthWeight = async (req, res) => {
+  const { month } = req.params;
   const arrForWholeTime = req.user.arrForWholeTime;
-  const needMonth = arrForWholeTime.find(
-    (year) => year.month == monthNow + 1
-  ).dates;
-  let needDay = needMonth.find((day) => day.date == dayNow).weight;
-  needDay = weight;
-  req.user.arrForWholeTime
-    .find((year) => year.month == monthNow + 1)
-    .dates.find((day) => day.date == dayNow).weight = needDay;
-  await User.findByIdAndUpdate(userId, {
-    arrForWholeTime: req.user.arrForWholeTime,
-  });
-  res.json({
-    arrForWholeTime: req.user.arrForWholeTime.find(
-      (year) => year.month == monthNow + 1
-    ),
-  });
+  const data = arrForWholeTime.find((year) => year.month == month).dates;
+  res.json(data);
 };
-
 export default {
   getUserCurrent: ctrlWrapper(getUserCurrent),
   updateUser: ctrlWrapper(updateUser),
   updateGoal: ctrlWrapper(updateGoal),
   updateAvatar: ctrlWrapper(updateAvatar),
-  changeWeight: ctrlWrapper(changeWeight),
+  getMonthWeight: ctrlWrapper(getMonthWeight),
 };
