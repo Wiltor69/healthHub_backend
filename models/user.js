@@ -33,14 +33,6 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
-    waterDailyNorma: {
-      type: Number,
-      default: 2,
-    },
-    caloriesDayilyNorma: {
-      type: Number,
-      default: 2000,
-    },
     goal: {
       type: String,
       enum: goalList,
@@ -65,11 +57,9 @@ const userSchema = new Schema(
 
     waterDailyNorma: {
       type: Number,
-      default: 2,
     },
     caloriesDayilyNorma: {
       type: Number,
-      default: 2000,
     },
     arrForWholeTime: [
       {

@@ -502,6 +502,55 @@
         }
       }
     },
+    "/api/stats/month/{monthNumber}": {
+      "get": {
+        "tags": ["Stats"],
+        "summary": "endpoint to get Calories and water",
+        "parameters": [
+          {
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "month, which needed to get the information",
+            "name": "monthNumber"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Nothing",
+          "required": false,
+          "content": {}
+        },
+        "responses": {
+          "200": {
+            "description": "Stats For month",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getWeightForMonth"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {}
+          }
+        }
+      }
+    },
     "/api/user/current": {
       "get": {
         "tags": ["User"],
@@ -1037,6 +1086,45 @@
         },
         "updatedAt": {
           "type": "string"
+        }
+      },
+      "getWeightForMonth": {
+        "type": "object",
+        "properties": {
+          "waterAverage": {
+            "type": "number"
+          },
+          "foodAverage": {
+            "type": "number"
+          },
+          "water": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "string"
+                },
+                "water": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "food": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "string"
+                },
+                "food": {
+                  "type": "number"
+                }
+              }
+            }
+          }
         }
       }
     },

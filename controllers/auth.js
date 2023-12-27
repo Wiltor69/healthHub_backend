@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import crypto from "node:crypto";
 // import nodemailer from "nodemailer";
 import { HttpError, ctrlWrapper, emailSend } from "../helpers/index.js";
-
+import { BMRMaleOrFemale, waterPlus } from "./user.js";
 import { User } from "../models/user.js";
 
 const { SECRET_KEY } = process.env;
@@ -22,7 +22,8 @@ const register = async (req, res) => {
     userActivity,
     gender,
   } = req.body;
-
+  const caloriesDayilyNorma = BMRMaleOrFemale(req.body, gender);
+  const waterDailyNorma = (weight * 0.03 + waterPlus(userActivity)).toFixed(1);
   const user = await User.findOne({ email });
   if (user) {
     throw HttpError(409, "Email in use");
@@ -49,6 +50,8 @@ const register = async (req, res) => {
     password: hashPass,
     verificationCode,
     arrForWholeTime,
+    caloriesDayilyNorma,
+    waterDailyNorma,
   });
 
   const payload = {
@@ -69,6 +72,9 @@ const register = async (req, res) => {
       weight: newUser.weight,
       height: newUser.height,
       userActivity: newUser.userActivity,
+
+      caloriesDayilyNorma,
+      waterDailyNorma,
     },
   });
 };

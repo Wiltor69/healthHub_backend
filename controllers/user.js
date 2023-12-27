@@ -1,6 +1,6 @@
 import { ctrlWrapper } from "../helpers/index.js";
 import { User } from "../models/user.js";
-const BMRMaleOrFemale = (user, gender) => {
+export const BMRMaleOrFemale = (user, gender) => {
   if (gender == "Male") {
     return Math.round(
       (88.362 + 13.397 * user.weight + 4.799 * user.height - 5.677 * user.age) *
@@ -15,7 +15,7 @@ const BMRMaleOrFemale = (user, gender) => {
   }
 };
 
-const waterPlus = (activity) => {
+export const waterPlus = (activity) => {
   if (activity == 1.25) {
     return 0;
   } else if (activity == 1.45 || activity == 1.65 || activity == 1.85) {
