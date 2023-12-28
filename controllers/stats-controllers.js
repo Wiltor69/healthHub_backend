@@ -198,7 +198,18 @@ const deleteMealById = async (req, res) => {
     message: "Delete success",
   });
 };
-
+const deleteAllMeatType = async (req, res) => {
+  const { mealType } = req.params;
+  const { _id: owner } = req.user;
+  console.log(owner);
+  const result = await Food.deleteMany({ owner, mealType });
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  res.json({
+    message: "Delete success",
+  });
+};
 const updateMealById = async (req, res) => {
   const { mealId } = req.params;
   const result = await Food.findByIdAndUpdate(mealId, req.body, {
@@ -218,6 +229,6 @@ export default {
   addMeal: ControllerWrapper(addMeal),
   getStatsForToday: ControllerWrapper(getStatsForToday),
   updateMealById: ControllerWrapper(updateMealById),
-
+  deleteAllMeatType: ControllerWrapper(deleteAllMeatType),
   getStatsForMonth: ControllerWrapper(getStatsForMonth),
 };

@@ -34,4 +34,5 @@ router.put(
   statsControllers.updateMealById
 );
 
+router.delete("/delMeal/:mealType", statsControllers.deleteAllMeatType);
 export default router;
