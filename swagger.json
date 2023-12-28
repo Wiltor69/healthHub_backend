@@ -527,7 +527,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/getWeightForMonth"
+                  "$ref": "#/components/schemas/getStatstForMonth"
                 }
               }
             }
@@ -547,6 +547,94 @@
           "500": {
             "description": "Internal Server Error",
             "content": {}
+          }
+        }
+      }
+    },
+    "/api/stats/food-intake/{mealId}/": {
+      "put": {
+        "tags": ["Stats"],
+        "summary": "endpoint to change meal",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "meal which is needed ",
+            "name": "mealId"
+          }
+        ],
+        "requestBody": {
+          "description": "Nothing",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addFoodIntakeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/addFoodIntakeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/user/weight/{month}": {
+      "get": {
+        "tags": ["User"],
+        "summary": "endpoint to get weight for month",
+        "parameters": [
+          {
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "month which is needed ",
+            "name": "month"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Nothing",
+          "required": false,
+          "content": {}
+        },
+        "responses": {
+          "200": {
+            "description": "User's weight for month",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "weightForMonthRes"
+                }
+              }
+            }
           }
         }
       }
@@ -643,26 +731,52 @@
       "RegistrationResponse": {
         "type": "object",
         "properties": {
+          "token": {
+            "type": "string"
+          },
           "auth": {
             "type": "object",
             "properties": {
               "name": {
-                "type": "number",
-                "description": "User's name",
-                "example": "Illia"
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
               },
               "email": {
-                "type": "string",
-                "description": "User's email",
-                "format": "email"
+                "type": "string"
+              },
+              "avatarURL": {
+                "type": "string"
+              },
+              "token": {
+                "type": "string"
+              },
+              "waterDailyNorma": {
+                "type": "number"
+              },
+              "caloriesDayilyNorma": {
+                "type": "number"
+              },
+              "goal": {
+                "type": "string"
+              },
+              "gender": {
+                "type": "string"
+              },
+              "age": {
+                "type": "number"
+              },
+              "height": {
+                "type": "number"
+              },
+              "weight": {
+                "type": "number"
+              },
+              "userActivity": {
+                "type": "string"
               }
             }
-          }
-        },
-        "example": {
-          "auth": {
-            "name": "illia",
-            "email": "user@gmail.com"
           }
         }
       },
@@ -705,6 +819,23 @@
           "token": "User's token",
           "auth": {
             "email": "user@gmail.com"
+          }
+        }
+      },
+      "weightForMonthRes": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "date": {
+              "type": "number"
+            },
+            "weight": {
+              "type": "number"
+            },
+            "_id": {
+              "type": "string"
+            }
           }
         }
       },
@@ -1088,7 +1219,7 @@
           "type": "string"
         }
       },
-      "getWeightForMonth": {
+      "getStatsForMonth": {
         "type": "object",
         "properties": {
           "waterAverage": {

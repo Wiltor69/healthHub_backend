@@ -30,7 +30,7 @@ router.delete("/water-intake", statsControllers.deleteAllWater);
 router.put(
   "/food-intake/:mealId",
   isValidId,
-  waterAddValidate,
+  mealAddValidate,
   statsControllers.updateMealById
 );
 
