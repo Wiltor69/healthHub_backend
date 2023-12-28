@@ -100,10 +100,16 @@ const updateGoal = async (req, res) => {
   const onePercent = BMR / 100;
   const countGoal = (percForProtein, percForFat) => {
     user.goal = goal;
-    macroelementsProporsion.protein = Math.round(onePercent * percForProtein);
-    macroelementsProporsion.fat = Math.round(onePercent * percForFat);
-    macroelementsProporsion.carbonohidrates =
-      BMR - macroelementsProporsion.protein - macroelementsProporsion.fat;
+    macroelementsProporsion.protein = Math.round(
+      (onePercent * percForProtein) / 4.1
+    );
+    macroelementsProporsion.fat = Math.round((onePercent * percForFat) / 9.3);
+    macroelementsProporsion.carbonohidrates = Math.round(
+      (BMR -
+        macroelementsProporsion.protein * 4.1 -
+        macroelementsProporsion.fat * 9.3) /
+        4.1
+    );
     user.macroelementsProporsion = macroelementsProporsion;
   };
   if (goal == "Lose fat") {
@@ -119,7 +125,7 @@ const updateGoal = async (req, res) => {
     goal,
     macroelementsProporsion,
   });
-  res.json({ message: `goal updated` });
+  res.json({ macroelementsProporsion });
 };
 
 const getUserCurrent = async (req, res) => {

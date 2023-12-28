@@ -45,10 +45,34 @@ const register = async (req, res) => {
       ],
     },
   ];
+  const onePercent = caloriesDayilyNorma / 100;
+  let macroelementsProporsion = {};
+  const countGoal = (percForProtein, percForFat) => {
+    macroelementsProporsion.protein = Math.round(
+      (onePercent * percForProtein) / 4.1
+    );
+    macroelementsProporsion.fat = Math.round((onePercent * percForFat) / 9.3);
+    macroelementsProporsion.carbonohidrates = Math.round(
+      (caloriesDayilyNorma -
+        macroelementsProporsion.protein * 4.1 -
+        macroelementsProporsion.fat * 9.3) /
+        4.1
+    );
+  };
+  if (goal == "Lose fat") {
+    countGoal(25, 20);
+  }
+  if (goal == "Maintain") {
+    countGoal(20, 25);
+  }
+  if (goal == "Gain Muscle") {
+    countGoal(30, 20);
+  }
   const newUser = await User.create({
     ...req.body,
     password: hashPass,
     verificationCode,
+    macroelementsProporsion,
     arrForWholeTime,
     caloriesDayilyNorma,
     waterDailyNorma,
@@ -72,7 +96,7 @@ const register = async (req, res) => {
       weight: newUser.weight,
       height: newUser.height,
       userActivity: newUser.userActivity,
-
+      macroelementsProporsion,
       caloriesDayilyNorma,
       waterDailyNorma,
     },

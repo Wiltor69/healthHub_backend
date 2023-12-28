@@ -6,7 +6,6 @@ const recomendFoodSchema = new Schema(
   {
     name: {
       type: String,
-      
     },
     amount: {
       type: String,
