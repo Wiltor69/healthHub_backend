@@ -67,8 +67,6 @@ const getStatsForMonth = async (req, res) => {
     };
   });
 
-  console.log(waterResult);
-
   const foodResult = filteredFoodArray.map((array) => {
     const formattedDate = formatDate(array[0].date);
 
@@ -163,11 +161,9 @@ const addMeal = async (req, res) => {
 };
 
 const addWater = async (req, res) => {
-  console.log(req.user);
   const { _id: owner } = req.user;
 
   const result = await Water.create({ owner, ...req.body });
-  console.log(result);
   res.status(201).json(result);
 };
 
@@ -177,7 +173,6 @@ const deleteAllWater = async (req, res) => {
 
   // const result = await Water.findByIdAndDelete(waterId);
   const result = await Water.deleteMany({ owner });
-  console.log(result);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -201,7 +196,6 @@ const deleteMealById = async (req, res) => {
 const deleteAllMeatType = async (req, res) => {
   const { mealType } = req.params;
   const { _id: owner } = req.user;
-  console.log(owner);
   const result = await Food.deleteMany({ owner, mealType });
   if (!result) {
     throw HttpError(404, "Not found");
